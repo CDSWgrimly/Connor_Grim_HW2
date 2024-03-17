@@ -29,7 +29,8 @@ public class MergeSorter extends AbstractSorter
 	 */
 	public MergeSorter(Point[] pts) 
 	{
-		// TODO  
+		super(pts);
+		algorithm = "mergesort";
 	}
 
 
@@ -40,7 +41,7 @@ public class MergeSorter extends AbstractSorter
 	@Override 
 	public void sort()
 	{
-		// TODO 
+		mergeSortRec(points);
 	}
 
 	

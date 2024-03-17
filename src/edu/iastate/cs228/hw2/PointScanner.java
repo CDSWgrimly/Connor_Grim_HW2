@@ -8,6 +8,7 @@ package edu.iastate.cs228.hw2;
 
 import java.io.FileNotFoundException;
 import java.util.InputMismatchException;
+import java.util.Scanner;
 
 
 /**
@@ -60,7 +61,36 @@ public class PointScanner
 	 */
 	protected PointScanner(String inputFileName, Algorithm algo) throws FileNotFoundException, InputMismatchException
 	{
-		// TODO
+		//Checks for no input file
+		if (inputFileName == null) {
+			throw new FileNotFoundException();
+		}
+		
+		//Checks number of values
+		int len = 0;
+		Scanner scnr = new Scanner(inputFileName);
+		while (scnr.hasNext()) {
+			len++;
+			scnr.nextInt();
+		}
+		scnr.close();
+		
+		//Checks if there is an odd amount of values
+		if (len % 2 == 1) {
+			throw new InputMismatchException();
+		}
+		
+		//Creates array of points
+		int size = len / 2;
+		scnr = new Scanner(inputFileName);
+		points = new Point[size];
+		
+		for (int i = 0; i < size; i++) {
+			int x = scnr.nextInt();
+			int y = scnr.nextInt();
+			points[i] = new Point(x, y);
+		}
+		scnr.close();
 	}
 
 	
@@ -78,22 +108,47 @@ public class PointScanner
 	 */
 	public void scan()
 	{
-		// TODO  
-		AbstractSorter aSorter; 
+		long startX, startY, endX, endY;
 		
-		// create an object to be referenced by aSorter according to sortingAlgorithm. for each of the two 
-		// rounds of sorting, have aSorter do the following: 
-		// 
-		//     a) call setComparator() with an argument 0 or 1. 
-		//
-		//     b) call sort(). 		
-		// 
-		//     c) use a new Point object to store the coordinates of the medianCoordinatePoint
-		//
-		//     d) set the medianCoordinatePoint reference to the object with the correct coordinates.
-		//
-		//     e) sum up the times spent on the two sorting rounds and set the instance variable scanTime. 
 		
+		// Sets Algorithm to perform 
+		AbstractSorter aSorter = null;
+		
+		//First Round: Sort X
+		if (sortingAlgorithm == Algorithm.SelectionSort) {
+			aSorter = new SelectionSorter(points);
+		} else if (sortingAlgorithm == Algorithm.InsertionSort) {
+			aSorter = new InsertionSorter(points);
+		} else if (sortingAlgorithm == Algorithm.MergeSort) {
+			aSorter = new MergeSorter(points);
+		} else if (sortingAlgorithm == Algorithm.QuickSort) {
+			aSorter = new QuickSorter(points);
+		} 
+		
+		aSorter.setComparator(0);
+		startX = System.nanoTime();
+		aSorter.sort();
+		endX = System.nanoTime();
+		
+		//Second Round: Sort Y
+		if (sortingAlgorithm == Algorithm.SelectionSort) {
+			aSorter = new SelectionSorter(points);
+		} else if (sortingAlgorithm == Algorithm.InsertionSort) {
+			aSorter = new InsertionSorter(points);
+		} else if (sortingAlgorithm == Algorithm.MergeSort) {
+			aSorter = new MergeSorter(points);
+		} else if (sortingAlgorithm == Algorithm.QuickSort) {
+			aSorter = new QuickSorter(points);
+		} 
+		
+		aSorter.setComparator(1);
+		startY = System.nanoTime();
+		aSorter.sort();
+		endY = System.nanoTime();
+		
+		//Create median point & set total sort time
+		medianCoordinatePoint = new Point(aSorter.getMedian());
+		scanTime = (endX - startX) + (endY - startY);		
 	}
 	
 	
@@ -119,7 +174,7 @@ public class PointScanner
 				sortStat.concat(" ");
 			}
 		}
-		sortStat.concat("" + points.length + " " + scanTime);
+		sortStat.concat("" + points.length + "\t" + scanTime);
 		return sortStat;
 	}
 	
@@ -145,7 +200,7 @@ public class PointScanner
 	 */
 	public void writeMCPToFile() throws FileNotFoundException
 	{
-		// TODO 
+		//TODO
 	}	
 
 	

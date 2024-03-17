@@ -2,7 +2,7 @@ package edu.iastate.cs228.hw2;
 
 /**
  *  
- * @author
+ * @author Connor Grim
  *
  */
 
@@ -30,13 +30,6 @@ public abstract class AbstractSorter
 	
 	
 	// Add other protected or private instance variables you may need. 
-	
-
-	protected AbstractSorter()
-	{
-		// No implementation needed. Provides a default super constructor to subclasses. 
-		// Removable after implementing SelectionSorter, InsertionSorter, MergeSorter, and QuickSorter.
-	}
 	
 	
 	/**
@@ -107,9 +100,9 @@ public abstract class AbstractSorter
 	/**
 	 * Use the created pointComparator to conduct sorting.  
 	 * 
-	 * Should be protected. Made public for testing. 
+	 * 
 	 */
-	public abstract void sort(); 
+	protected abstract void sort(); 
 	
 	
 	/**

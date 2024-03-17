@@ -2,7 +2,7 @@ package edu.iastate.cs228.hw2;
 
 /**
  *  
- * @author
+ * @author Connor Grim
  *
  */
 
@@ -63,7 +63,7 @@ public class CompareSorters
 	/**
 	 * This method generates a given number of random points.
 	 * The coordinates of these points are pseudo-random numbers within the range 
-	 * [-50,50] × [-50,50]. Please refer to Section 3 on how such points can be generated.
+	 * [-50,50] ï¿½ [-50,50]. Please refer to Section 3 on how such points can be generated.
 	 * 
 	 * Ought to be private. Made public for testing. 
 	 * 
@@ -73,8 +73,16 @@ public class CompareSorters
 	 */
 	public static Point[] generateRandomPoints(int numPts, Random rand) throws IllegalArgumentException
 	{ 
-		return null; 
-		// TODO 
+		if (numPts < 1) {
+			throw new IllegalArgumentException();
+		}
+		Point pts[] = new Point[numPts];
+		
+		for (int i = 0; i < numPts; i++) {
+			pts[i] = new Point(rand.nextInt(101) - 50, rand.nextInt(101) - 50);
+		}
+		
+		return pts;
 	}
 	
 }
