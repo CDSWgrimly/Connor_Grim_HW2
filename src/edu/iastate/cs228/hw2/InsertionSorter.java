@@ -42,10 +42,10 @@ public class InsertionSorter extends AbstractSorter
 	public void sort()
 	{
 		//Insertion Sort
-		for (int i = 0; i < points.length; i++) {
+		for (int i = 1; i < points.length; i++) {
 			Point curr = points[i];
 			int j = i - 1;
-			while (j >= 0 && pointComparator.compare(points[i], curr) > 0) {
+			while (j >= 0 && pointComparator.compare(points[j], curr) > 0) {
 				points[j + 1] = points[j];
 				j--;
 			}

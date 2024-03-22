@@ -9,6 +9,8 @@ package edu.iastate.cs228.hw2;
 import java.io.FileNotFoundException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+import java.io.File;
+import java.io.PrintWriter;
 
 
 /**
@@ -27,6 +29,7 @@ public class PointScanner
 	                                      // the x coordinates and y coordinates of those points in the array points[].
 	private Algorithm sortingAlgorithm;    
 	
+	private String outputFileName;
 		
 	protected long scanTime; 	       // execution time in nanoseconds. 
 	
@@ -49,6 +52,15 @@ public class PointScanner
 				points[i] = pts[i];
 			}
 		}
+		if (sortingAlgorithm == Algorithm.SelectionSort) {
+			outputFileName = "selection.txt";
+		} else if (sortingAlgorithm == Algorithm.InsertionSort) {
+			outputFileName = "insertion.txt";
+		} else if (sortingAlgorithm == Algorithm.MergeSort) {
+			outputFileName = "merge.txt";
+		} else if (sortingAlgorithm == Algorithm.QuickSort) {
+			outputFileName = "quick.txt";
+		}
 	}
 
 	
@@ -61,28 +73,40 @@ public class PointScanner
 	 */
 	protected PointScanner(String inputFileName, Algorithm algo) throws FileNotFoundException, InputMismatchException
 	{
+		File inputFile = new File(inputFileName);
+		int count = 0;
+		Scanner pointScan = new Scanner(inputFile);
+		
+		sortingAlgorithm = algo;
 		//Checks for no input file
 		if (inputFileName == null) {
 			throw new FileNotFoundException();
 		}
 		
-		//Checks number of values
-		int len = 0;
-		Scanner scnr = new Scanner(inputFileName);
-		while (scnr.hasNext()) {
-			len++;
-			scnr.nextInt();
+		if (sortingAlgorithm == Algorithm.SelectionSort) {
+			outputFileName = "selection.txt";
+		} else if (sortingAlgorithm == Algorithm.InsertionSort) {
+			outputFileName = "insertion.txt";
+		} else if (sortingAlgorithm == Algorithm.MergeSort) {
+			outputFileName = "merge.txt";
+		} else if (sortingAlgorithm == Algorithm.QuickSort) {
+			outputFileName = "quick.txt";
 		}
-		scnr.close();
 		
-		//Checks if there is an odd amount of values
-		if (len % 2 == 1) {
+		//Checks number of values and throws InputMismatchException if odd
+		while (pointScan.hasNextInt()) {
+			pointScan.nextInt();
+			count++;
+		}
+		
+		if (count % 2 == 1) {
 			throw new InputMismatchException();
 		}
 		
+		
 		//Creates array of points
-		int size = len / 2;
-		scnr = new Scanner(inputFileName);
+		int size = count / 2;
+		Scanner scnr = new Scanner(inputFile);
 		points = new Point[size];
 		
 		for (int i = 0; i < size; i++) {
@@ -166,15 +190,28 @@ public class PointScanner
 	public String stats()
 	{
 		String sortStat = "";
-		for (int i = 0; i < 16; i++) {
-			if (sortingAlgorithm.toString().substring(i, i + 1) != null) {
-				sortStat.concat(sortingAlgorithm.toString().substring(i, i + 1));
-			}
-			else {
-				sortStat.concat(" ");
-			}
+		int whitespaceLength = 0;
+		
+		//Adds name of sorter and aligns using whitespace
+		if (sortingAlgorithm == Algorithm.SelectionSort) {
+			sortStat += "SelectionSort";
+			whitespaceLength = 5;
+		} else if (sortingAlgorithm == Algorithm.InsertionSort) {
+			sortStat += "InsertionSort";
+			whitespaceLength = 5;
+		} else if (sortingAlgorithm == Algorithm.MergeSort) {
+			sortStat += "MergeSort";
+			whitespaceLength = 9;
+		} else if (sortingAlgorithm == Algorithm.QuickSort) {
+			sortStat += "QuickSort";
+			whitespaceLength = 9;
 		}
-		sortStat.concat("" + points.length + "\t" + scanTime);
+		
+		for (int i = 0; i <= whitespaceLength; i++) {
+			sortStat += " ";
+		}
+		//Add size and time
+		sortStat += points.length + "  " + scanTime;
 		return sortStat;
 	}
 	
@@ -200,7 +237,10 @@ public class PointScanner
 	 */
 	public void writeMCPToFile() throws FileNotFoundException
 	{
-		//TODO
+		File outputFile = new File(outputFileName);
+		PrintWriter pw = new PrintWriter(outputFile);
+		pw.write(this.toString());
+		pw.close();
 	}	
 
 	

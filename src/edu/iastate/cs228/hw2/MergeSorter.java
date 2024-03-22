@@ -54,10 +54,61 @@ public class MergeSorter extends AbstractSorter
 	 */
 	private void mergeSortRec(Point[] pts)
 	{
+		int n = pts.length;
 		
+		//Base Case
+		if (n <= 1) {
+			return;
+		}
+		
+		//Setup subarrays
+		Point[] left = new Point[n/2];
+		Point[] right = new Point[n - (n/2)];
+		
+		for (int i = 0; i < left.length; i++) {
+			left[i] = pts[i];
+		}
+		for (int i = 0; i < right.length; i++) {
+			right[i] = pts[left.length + i];
+		}
+		
+		//Recursive call
+		mergeSortRec(left);
+		mergeSortRec(right);
+		
+		merge(pts, left, right);
 	}
 
+	/**
+	 * Merges subarrays into the original array. Sorts while merging.
+	 * 
+	 * @param pts 	points array
+	 * @param left	left subarray
+	 * @param right	right subarray
+	 */
 	
-	// Other private methods if needed ...
+	private void merge(Point[] pts, Point[] left, Point[] right) {
+		int firstL = 0;
+		int firstR = 0;
+		int index = 0; 
+		
+		//Adds points to original array sorted
+		while ((firstL < left.length) && (firstR < right.length)) {
+			if (pointComparator.compare(left[firstL], right[firstR]) < 0) {
+				pts[index] = left[firstL++];
+			} else {
+				pts[index] = right[firstR++];
+			}
+			index++;
+		}
+		
+		// Adds leftover points to each side
+		while (firstL < left.length) {
+			pts[index++] = left[firstL++];
+		}
+		while (firstR < right.length) {
+			pts[index++] = right[firstR++];
+		}
+	}
 
 }

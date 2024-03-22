@@ -72,9 +72,11 @@ public abstract class AbstractSorter
 	 */
 	public void setComparator(int order) throws IllegalArgumentException
 	{
-		if (order < 0 || order >= 2) {
+		if (order < 0 || order > 1) {
 			throw new IllegalArgumentException();
 		}
+
+		//Compares by x
 		else if (order == 0) {
 			Point.setXorY(true);
 			pointComparator = new Comparator<Point>() {
@@ -84,7 +86,8 @@ public abstract class AbstractSorter
 				}
 			};
 		}
-		else {
+		//Compares by y
+		else if (order == 1){
 			Point.setXorY(false);
 			pointComparator = new Comparator<Point>() {
 				@Override
